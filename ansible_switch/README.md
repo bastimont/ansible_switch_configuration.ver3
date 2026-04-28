@@ -38,7 +38,8 @@ pip install ansible
 ## ▶️ How to Run (write on CMD)
 
 ```bash
-# cd C:\Users\user\Desktop\ansible_switch
+# From the ansible_switch directory:
+cd C:\Users\user\Desktop\ansible_switch
 python menu.py
 ```
 
