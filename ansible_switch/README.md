@@ -56,7 +56,7 @@ That's it. The interactive menu handles everything.
 | **3** | Ping a single switch (real OS-level ping, like `cmd`) |
 | **4** | Ping **all** switches at once |
 | **5** | Run any Ansible playbook manually with optional extra-vars |
-| **6** | Live Network Discovery & Monitor |
+| **6** | Live Network Discovery & Monitor (for devices within the same network) |
 | **0** | Exit |
 
 ---
