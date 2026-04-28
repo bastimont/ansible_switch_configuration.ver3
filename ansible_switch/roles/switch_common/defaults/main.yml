@@ -1,0 +1,7 @@
+---
+# Default values used by the switch_common role
+switch_ip: "0.0.0.0"
+switch_role: "access"
+switch_description: "Unconfigured Switch"
+default_gateway: "10.0.0.1"
+subnet_mask: "255.255.255.0"

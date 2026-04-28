@@ -1,0 +1,50 @@
+---
+# =============================================================
+#  show_topology.yml — Print the full switch tree with IPs
+# =============================================================
+- name: Show Switch Topology
+  hosts: all_switches
+  gather_facts: false
+
+  tasks:
+    - name: Collect switch info
+      ansible.builtin.set_fact:
+        info_line: "{{ inventory_hostname }} | IP: {{ switch_ip }} | Role: {{ switch_role }} | {{ switch_description }}"
+
+    - name: Print topology header
+      ansible.builtin.debug:
+        msg: |
+          ============================================================
+            SWITCH TOPOLOGY
+          ============================================================
+      run_once: true
+
+    - name: Print management switches
+      ansible.builtin.debug:
+        msg: "  [MGMT]  {{ info_line }}"
+      when: inventory_hostname in groups['management']
+
+    - name: Print tier A switches
+      ansible.builtin.debug:
+        msg: "  [A]     {{ info_line }}"
+      when: inventory_hostname in groups['tier_a']
+
+    - name: Print tier B switches
+      ansible.builtin.debug:
+        msg: "  [B]     {{ info_line }}"
+      when: inventory_hostname in groups['tier_b']
+
+    - name: Print tier C switches
+      ansible.builtin.debug:
+        msg: "  [C]     {{ info_line }}"
+      when: inventory_hostname in groups['tier_c']
+
+    - name: Print tier D switches
+      ansible.builtin.debug:
+        msg: "  [D]     {{ info_line }}"
+      when: inventory_hostname in groups['tier_d']
+
+    - name: Print footer
+      ansible.builtin.debug:
+        msg: "============================================================"
+      run_once: true

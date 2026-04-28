@@ -1,0 +1,62 @@
+---
+# =============================================================
+#  assign_ip.yml — Assign a dummy IP to a specific switch
+#  Usage:
+#    ansible-playbook playbooks/assign_ip.yml \
+#      -e "target=A1-B new_ip=192.168.1.50"
+# =============================================================
+- name: Validate inputs
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    target: ""
+    new_ip: ""
+
+  tasks:
+    - name: Fail if target is not provided
+      ansible.builtin.fail:
+        msg: "ERROR: You must provide 'target' (e.g., -e target=A1-B)"
+      when: target == ""
+
+    - name: Fail if new_ip is not provided
+      ansible.builtin.fail:
+        msg: "ERROR: You must provide 'new_ip' (e.g., -e new_ip=192.168.1.50)"
+      when: new_ip == ""
+
+    - name: Validate IP address format
+      ansible.builtin.fail:
+        msg: "ERROR: '{{ new_ip }}' is not a valid IPv4 address."
+      when: new_ip is not match('^(\d{1,3}\.){3}\d{1,3}$')
+
+    - name: Check that target switch exists in inventory
+      ansible.builtin.fail:
+        msg: >
+          ERROR: Switch '{{ target }}' not found in inventory.
+          Valid switches: {{ groups['all_switches'] | join(', ') }}
+      when: target not in groups['all_switches']
+
+- name: Assign IP to switch
+  hosts: "{{ target }}"
+  gather_facts: false
+
+  vars:
+    target: ""
+    new_ip: ""
+
+  tasks:
+    - name: Write new IP to host_vars file
+      ansible.builtin.template:
+        src: "../templates/host_vars.j2"
+        dest: "{{ playbook_dir }}/../host_vars/{{ inventory_hostname }}.yml"
+        mode: "0644"
+      delegate_to: localhost
+
+    - name: Confirm assignment
+      ansible.builtin.debug:
+        msg: >
+          ✅  Switch '{{ inventory_hostname }}' successfully configured:
+              IP        : {{ new_ip }}
+              Subnet    : {{ subnet_mask }}
+              Gateway   : {{ default_gateway }}
+              Role      : {{ switch_role }}

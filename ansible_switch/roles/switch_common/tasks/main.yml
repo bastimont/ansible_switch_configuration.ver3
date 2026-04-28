@@ -1,0 +1,24 @@
+---
+# =============================================================
+#  switch_common/tasks/main.yml
+#  Reusable tasks: validate IP, print interface "up" banner
+# =============================================================
+
+- name: Validate switch_ip is a proper IPv4 address
+  ansible.builtin.assert:
+    that:
+      - switch_ip is match('^(\d{1,3}\.){3}\d{1,3}$')
+    fail_msg: >
+      '{{ switch_ip }}' is not a valid IPv4 address for {{ inventory_hostname }}.
+    success_msg: >
+      IP {{ switch_ip }} is valid for {{ inventory_hostname }}.
+
+- name: Simulate interface up
+  ansible.builtin.debug:
+    msg: >
+      [SWITCH UP]  {{ inventory_hostname }}
+        Interface : GigabitEthernet0/0
+        IP Address: {{ switch_ip }}
+        Mask      : {{ subnet_mask }}
+        Gateway   : {{ default_gateway }}
+        Status    : UP / UP

@@ -1,0 +1,31 @@
+---
+# =============================================================
+#  ping_check.yml — Ping one or all switches and report status
+#  Usage:
+#    ansible-playbook playbooks/ping_check.yml -e "target=A1-B"
+#    ansible-playbook playbooks/ping_check.yml -e "target=all_switches"
+# =============================================================
+
+- name: Ping Check
+  hosts: "{{ target | default('all_switches') }}"
+  gather_facts: false
+
+  tasks:
+    - name: Ansible connectivity check (module ping)
+      ansible.builtin.ping:
+      register: ansible_ping_result
+      ignore_errors: true
+
+    - name: Simulate OS ping — always succeeds for managed dummy switches
+      ansible.builtin.set_fact:
+        os_ping_rc: 0
+        os_ping_note: "Simulated (managed topology — all switches reachable)"
+
+    - name: Report ping result
+      ansible.builtin.debug:
+        msg: |
+          ┌─────────────────────────────────────────────────────┐
+          │ Switch : {{ inventory_hostname | ljust(10) }} │ IP: {{ switch_ip }}
+          │ Ansible: {{ 'REACHABLE ✅' if ansible_ping_result.ping is defined else 'UNREACHABLE ❌' }}
+          │ OS Ping: {{ 'SUCCESS ✅' if os_ping_rc | int == 0 else 'FAILED ❌  (dummy IP — expected)' }}
+          └─────────────────────────────────────────────────────┘

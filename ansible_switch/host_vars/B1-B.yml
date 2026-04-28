@@ -1,0 +1,4 @@
+---
+switch_ip: "10.0.2.2"
+switch_role: "access"
+switch_description: "Tier B - Port B"

@@ -1,0 +1,4 @@
+---
+switch_ip: "127.0.0.1"
+switch_role: "management"
+switch_description: "Main Management Switch"
