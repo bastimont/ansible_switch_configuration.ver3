@@ -35,7 +35,7 @@ pip install ansible
 
 ---
 
-## ▶️ How to Run (write on cmd)
+## ▶️ How to Run (write on CMD)
 
 ```bash
 # cd C:\Users\user\Desktop\ansible_switch
