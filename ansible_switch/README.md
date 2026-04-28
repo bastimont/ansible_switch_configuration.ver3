@@ -115,4 +115,4 @@ ansible-playbook playbooks/ping_check.yml
 - Dummy IPs (e.g. `10.0.1.2`) will correctly show as **unreachable** via OS ping,
   which is expected behaviour in a demo environment.
 - In case a real hardware device gets plugged in to the main computer, it will be detected then displayed on **DISCOVERED** connections within section **[6]**.
-- Any dummy IPs can be used as placeholder values to be replaced by those of the actual physical devices.  
+- Any dummy IPs can be used as placeholder values to be replaced by those of the actual physical devices. You are then allowed to freely interact with them. 
